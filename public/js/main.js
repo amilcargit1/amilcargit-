@@ -37,3 +37,32 @@ function escapeHtml(str) {
 }
 
 loadPosts();
+
+// --- Contador de visitas ---
+async function registerVisit() {
+  const el = document.getElementById('visit-count');
+  try {
+    const res = await fetch('/api/visits', { method: 'POST' });
+    const data = await res.json();
+    el.textContent = data.visits;
+  } catch (err) {
+    el.textContent = '—';
+  }
+}
+registerVisit();
+
+// --- Formulario de contacto por WhatsApp ---
+const WHATSAPP_NUMBER = '51910227479';
+const contactForm = document.getElementById('contact-form');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('c-name').value.trim();
+    const message = document.getElementById('c-message').value.trim();
+
+    const text = `Hola, soy ${name}. ${message}`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank', 'noopener');
+  });
+}
