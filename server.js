@@ -36,6 +36,8 @@ if (USE_DB) {
   });
 }
 
+const VISITS_FILE = path.join(__dirname, 'data', 'visits.json');
+
 async function initDb() {
   if (!USE_DB) return;
   await pool.query(`
@@ -48,6 +50,34 @@ async function initDb() {
       date TIMESTAMPTZ NOT NULL
     );
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS stats (
+      id INTEGER PRIMARY KEY DEFAULT 1,
+      visits BIGINT NOT NULL DEFAULT 0
+    );
+  `);
+  await pool.query(`
+    INSERT INTO stats (id, visits) VALUES (1, 0)
+    ON CONFLICT (id) DO NOTHING;
+  `);
+}
+
+async function incrementVisits() {
+  if (USE_DB) {
+    const { rows } = await pool.query(
+      'UPDATE stats SET visits = visits + 1 WHERE id = 1 RETURNING visits'
+    );
+    return Number(rows[0].visits);
+  }
+  let count = 0;
+  try {
+    count = JSON.parse(fs.readFileSync(VISITS_FILE, 'utf-8')).count || 0;
+  } catch (err) {
+    count = 0;
+  }
+  count += 1;
+  fs.writeFileSync(VISITS_FILE, JSON.stringify({ count }), 'utf-8');
+  return count;
 }
 
 // --- Helpers de datos (JSON, solo para desarrollo local sin base de datos) ---
@@ -208,6 +238,16 @@ app.delete('/api/posts/:id', requireAuth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al borrar' });
+  }
+});
+
+app.post('/api/visits', async (req, res) => {
+  try {
+    const visits = await incrementVisits();
+    res.json({ visits });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al registrar visita' });
   }
 });
 
