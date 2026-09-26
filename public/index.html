@@ -28,10 +28,49 @@
         <p class="empty">Cargando publicaciones...</p>
       </div>
     </section>
+
+    <section id="servicios">
+      <h2>Servicios</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <h3>Bot de WhatsApp</h3>
+          <p>Desarrollo de bots personalizados para WhatsApp con los comandos que necesites.</p>
+          <p class="price">Desde $20</p>
+          <a class="order-btn" href="https://wa.me/51910227479?text=Hola%2C%20quiero%20pedir%20informaci%C3%B3n%20sobre%20el%20servicio%20de%20Bot%20de%20WhatsApp" target="_blank" rel="noopener">Pedir</a>
+        </div>
+        <div class="service-card">
+          <h3>Diseño / Edición</h3>
+          <p>Diseño gráfico, ediciones y contenido visual para tus redes.</p>
+          <p class="price">Desde $10</p>
+          <a class="order-btn" href="https://wa.me/51910227479?text=Hola%2C%20quiero%20pedir%20informaci%C3%B3n%20sobre%20el%20servicio%20de%20Dise%C3%B1o" target="_blank" rel="noopener">Pedir</a>
+        </div>
+        <div class="service-card">
+          <h3>Asesoría</h3>
+          <p>Asesoría personalizada en desarrollo, bots o tu marca personal.</p>
+          <p class="price">Desde $15</p>
+          <a class="order-btn" href="https://wa.me/51910227479?text=Hola%2C%20quiero%20pedir%20informaci%C3%B3n%20sobre%20el%20servicio%20de%20Asesor%C3%ADa" target="_blank" rel="noopener">Pedir</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <h2>Contacto</h2>
+      <p class="bio" style="margin-bottom:16px;">¿Tienes una propuesta o quieres trabajar conmigo? Escríbeme:</p>
+      <form id="contact-form" class="contact-form">
+        <label for="c-name">Nombre</label>
+        <input id="c-name" required />
+
+        <label for="c-message">Mensaje</label>
+        <textarea id="c-message" required placeholder="Cuéntame sobre tu propuesta o colaboración"></textarea>
+
+        <button type="submit">Enviar por WhatsApp</button>
+      </form>
+    </section>
   </main>
 
   <footer>
     <p>&copy; <span id="year"></span> AMILCARGIT OFICIAL</p>
+    <p class="visit-counter">👁️ <span id="visit-count">...</span> visitas</p>
   </footer>
 
   <script src="/js/main.js"></script>
