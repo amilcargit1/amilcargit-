@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Panel — Publicaciones</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <h1>Publicaciones</h1>
+      <button id="logout-btn">Cerrar sesión</button>
+    </div>
+
+    <div class="admin-card" style="margin-bottom:24px;">
+      <h1 id="form-title">Nueva publicación</h1>
+      <form id="post-form">
+        <input type="hidden" id="post-id" />
+        <label for="title">Título</label>
+        <input id="title" required />
+
+        <label for="content">Contenido</label>
+        <textarea id="content" required></textarea>
+
+        <label for="link">Enlace (opcional)</label>
+        <input id="link" placeholder="https://..." />
+
+        <label for="image">Imagen — URL (opcional)</label>
+        <input id="image" placeholder="https://..." />
+
+        <button type="submit" id="submit-btn">Publicar</button>
+      </form>
+      <p id="form-error" class="error-msg"></p>
+    </div>
+
+    <div id="posts-list"></div>
+  </div>
+
+  <script src="/admin/js/admin.js"></script>
+</body>
+</html>
