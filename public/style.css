@@ -120,12 +120,109 @@ main h2 {
 
 .empty { color: var(--muted); }
 
+main section + section { margin-top: 40px; }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.service-card {
+  background: var(--card);
+  border: 1px solid #2b2b36;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.service-card p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 10px;
+  flex-grow: 1;
+}
+
+.service-card .price {
+  color: var(--accent-2);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.order-btn {
+  display: inline-block;
+  text-align: center;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.order-btn:hover { opacity: 0.9; }
+
+.contact-form {
+  background: var(--card);
+  border: 1px solid #2b2b36;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 480px;
+}
+
+.contact-form label {
+  display: block;
+  margin: 10px 0 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #2b2b36;
+  background: #0f0f14;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.contact-form textarea { min-height: 100px; resize: vertical; }
+
+.contact-form button {
+  margin-top: 14px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #25D366;
+  color: #062c14;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contact-form button:hover { opacity: 0.9; }
+
 footer {
   text-align: center;
   padding: 20px;
   color: var(--muted);
   font-size: 0.8rem;
   border-top: 1px solid #22222c;
+}
+
+.visit-counter {
+  margin-top: 6px;
+  font-size: 0.8rem;
 }
 
 /* --- Panel admin --- */
