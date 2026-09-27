@@ -94,22 +94,53 @@ function writePostsFile(posts) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
 }
 
+// --- Imágenes: se guardan como JSON dentro de la misma columna "image" ---
+const MAX_IMAGES = 15;
+
+function normalizeImages(images) {
+  if (!Array.isArray(images)) return [];
+  return images
+    .map((url) => String(url || '').trim())
+    .filter(Boolean)
+    .slice(0, MAX_IMAGES);
+}
+
+function parseImages(raw) {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+    return [String(parsed)];
+  } catch (err) {
+    // Dato viejo: una sola URL guardada como texto plano
+    return [raw];
+  }
+}
+
+function toPublicPost(row) {
+  const { image, ...rest } = row;
+  return { ...rest, images: parseImages(image) };
+}
+
 // --- Capa de datos unificada ---
 async function getAllPosts() {
   if (USE_DB) {
     const { rows } = await pool.query('SELECT * FROM posts ORDER BY date DESC');
-    return rows;
+    return rows.map(toPublicPost);
   }
-  return readPostsFile().sort((a, b) => new Date(b.date) - new Date(a.date));
+  return readPostsFile()
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map(toPublicPost);
 }
 
-async function createPost({ title, content, link, image }) {
+async function createPost({ title, content, link, images }) {
+  const imagesArr = normalizeImages(images);
   const post = {
     id: Date.now().toString(),
     title,
     content,
     link: link || '',
-    image: image || '',
+    image: JSON.stringify(imagesArr),
     date: new Date().toISOString(),
   };
   if (USE_DB) {
@@ -122,10 +153,11 @@ async function createPost({ title, content, link, image }) {
     posts.push(post);
     writePostsFile(posts);
   }
-  return post;
+  return toPublicPost(post);
 }
 
-async function updatePost(id, { title, content, link, image }) {
+async function updatePost(id, { title, content, link, images }) {
+  const imagesArr = images !== undefined ? JSON.stringify(normalizeImages(images)) : undefined;
   if (USE_DB) {
     const { rows } = await pool.query('SELECT * FROM posts WHERE id = $1', [id]);
     if (!rows[0]) return null;
@@ -134,13 +166,13 @@ async function updatePost(id, { title, content, link, image }) {
       title: title ?? current.title,
       content: content ?? current.content,
       link: link ?? current.link,
-      image: image ?? current.image,
+      image: imagesArr ?? current.image,
     };
     await pool.query(
       'UPDATE posts SET title=$1, content=$2, link=$3, image=$4 WHERE id=$5',
       [updated.title, updated.content, updated.link, updated.image, id]
     );
-    return { ...current, ...updated };
+    return toPublicPost({ ...current, ...updated });
   }
   const posts = readPostsFile();
   const idx = posts.findIndex((p) => p.id === id);
@@ -150,10 +182,10 @@ async function updatePost(id, { title, content, link, image }) {
     title: title ?? posts[idx].title,
     content: content ?? posts[idx].content,
     link: link ?? posts[idx].link,
-    image: image ?? posts[idx].image,
+    image: imagesArr ?? posts[idx].image,
   };
   writePostsFile(posts);
-  return posts[idx];
+  return toPublicPost(posts[idx]);
 }
 
 async function deletePost(id) {
@@ -206,12 +238,15 @@ app.get('/api/posts', async (req, res) => {
 });
 
 app.post('/api/posts', requireAuth, async (req, res) => {
-  const { title, content, link, image } = req.body || {};
+  const { title, content, link, images } = req.body || {};
   if (!title || !content) {
     return res.status(400).json({ error: 'Título y contenido son obligatorios' });
   }
+  if (images !== undefined && !Array.isArray(images)) {
+    return res.status(400).json({ error: 'images debe ser un arreglo de URLs' });
+  }
   try {
-    const post = await createPost({ title, content, link, image });
+    const post = await createPost({ title, content, link, images });
     res.status(201).json(post);
   } catch (err) {
     console.error(err);
