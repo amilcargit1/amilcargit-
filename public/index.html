@@ -32,18 +32,25 @@
     <section id="videos">
       <h2>Videos</h2>
 
-      <h3 class="sub-title">YouTube</h3>
-      <div class="video-item youtube-channel">
-        <iframe src="https://www.youtube.com/embed/videoseries?list=UUGSQ8a33mIesqSUJxqs1rNg" title="Videos de AMILCARGIT en YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="video-tabs">
+        <button class="tab-btn active" data-tab="tab-youtube">YouTube</button>
+        <button class="tab-btn" data-tab="tab-tiktok">TikTok</button>
       </div>
 
-      <h3 class="sub-title">TikTok</h3>
-      <div class="tiktok-grid">
-        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@amilkargit1" data-unique-id="amilkargit1" data-embed-type="creator" style="max-width: 780px; min-width: 288px;">
-          <section>
-            <a target="_blank" href="https://www.tiktok.com/@amilkargit1?refer=creator_embed">@amilkargit1</a>
-          </section>
-        </blockquote>
+      <div id="tab-youtube" class="tab-panel active">
+        <div class="video-item youtube-channel">
+          <iframe src="https://www.youtube.com/embed/videoseries?list=UUGSQ8a33mIesqSUJxqs1rNg" title="Videos de AMILCARGIT en YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div id="tab-tiktok" class="tab-panel">
+        <div class="tiktok-grid">
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@amilkargit1" data-unique-id="amilkargit1" data-embed-type="creator" style="max-width: 780px; min-width: 288px;">
+            <section>
+              <a target="_blank" href="https://www.tiktok.com/@amilkargit1?refer=creator_embed">@amilkargit1</a>
+            </section>
+          </blockquote>
+        </div>
       </div>
     </section>
 
